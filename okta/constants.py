@@ -31,6 +31,7 @@ OKTA_APP_SIGN_ON_TO_MODEL = {
     ASM.OPENID_CONNECT: models.OpenIdConnectApplication,
     ASM.SAML_2_0: models.SamlApplication,
     ASM.SAML_1_1: models.SamlApplication,
+    None: models.SamlApplication,
     ASM.SECURE_PASSWORD_STORE: models.SecurePasswordStoreApplication,
     ASM.WS_FEDERATION: models.WsFederationApplication
 }
