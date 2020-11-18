@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.models.application\
     import Application
-import okta.models.scheme_application_credentials\
+from okta.models import scheme_application_credentials\
     as scheme_application_credentials
 
 
@@ -39,10 +39,12 @@ class BrowserPluginApplication(
                 if isinstance(config["credentials"],
                               scheme_application_credentials.SchemeApplicationCredentials):
                     self.credentials = config["credentials"]
-                else:
+                elif config["credentials"] is not None:
                     self.credentials = scheme_application_credentials.SchemeApplicationCredentials(
                         config["credentials"]
                     )
+                else:
+                    self.credentials = None
             else:
                 self.credentials = None
         else:

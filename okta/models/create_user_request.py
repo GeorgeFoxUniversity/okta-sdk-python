@@ -20,11 +20,11 @@ limitations under the License.
 
 from okta.okta_object import OktaObject
 from okta.okta_collection import OktaCollection
-import okta.models.user_credentials\
+from okta.models import user_credentials\
     as user_credentials
-import okta.models.user_profile\
+from okta.models import user_profile\
     as user_profile
-import okta.models.user_type\
+from okta.models import user_type\
     as user_type
 
 
@@ -42,10 +42,12 @@ class CreateUserRequest(
                 if isinstance(config["credentials"],
                               user_credentials.UserCredentials):
                     self.credentials = config["credentials"]
-                else:
+                elif config["credentials"] is not None:
                     self.credentials = user_credentials.UserCredentials(
                         config["credentials"]
                     )
+                else:
+                    self.credentials = None
             else:
                 self.credentials = None
             self.group_ids = OktaCollection.form_list(
@@ -57,20 +59,24 @@ class CreateUserRequest(
                 if isinstance(config["profile"],
                               user_profile.UserProfile):
                     self.profile = config["profile"]
-                else:
+                elif config["profile"] is not None:
                     self.profile = user_profile.UserProfile(
                         config["profile"]
                     )
+                else:
+                    self.profile = None
             else:
                 self.profile = None
             if "type" in config:
                 if isinstance(config["type"],
                               user_type.UserType):
                     self.type = config["type"]
-                else:
+                elif config["type"] is not None:
                     self.type = user_type.UserType(
                         config["type"]
                     )
+                else:
+                    self.type = None
             else:
                 self.type = None
         else:

@@ -1,5 +1,19 @@
 # Okta Python SDK Changelog
 
+## v1.0.5
+- Fix construction of http request
+
+## v1.0.4
+- Fix cyclic imports for Python3.6
+- Update according to openapi 2.1.6
+- Fix logs pagination.
+
+## v1.0.3
+- Fix construction of async http request, fix method not allowed issue.
+
+## v1.0.2
+- Update setup.py, fix python_requires parameter
+
 ## v1.0.1
 - Add `__init__.py` files for all modules so imports work correctly during publish
 

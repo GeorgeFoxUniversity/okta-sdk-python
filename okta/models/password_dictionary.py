@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.password_dictionary_common\
+from okta.models import password_dictionary_common\
     as password_dictionary_common
 
 
@@ -37,10 +37,12 @@ class PasswordDictionary(
                 if isinstance(config["common"],
                               password_dictionary_common.PasswordDictionaryCommon):
                     self.common = config["common"]
-                else:
+                elif config["common"] is not None:
                     self.common = password_dictionary_common.PasswordDictionaryCommon(
                         config["common"]
                     )
+                else:
+                    self.common = None
             else:
                 self.common = None
         else:

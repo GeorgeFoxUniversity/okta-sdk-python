@@ -19,11 +19,11 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.inline_hook_channel\
+from okta.models import inline_hook_channel\
     as inline_hook_channel
-import okta.models.inline_hook_status\
+from okta.models import inline_hook_status\
     as inline_hook_status
-import okta.models.inline_hook_type\
+from okta.models import inline_hook_type\
     as inline_hook_type
 
 
@@ -43,10 +43,12 @@ class InlineHook(
                 if isinstance(config["channel"],
                               inline_hook_channel.InlineHookChannel):
                     self.channel = config["channel"]
-                else:
+                elif config["channel"] is not None:
                     self.channel = inline_hook_channel.InlineHookChannel(
                         config["channel"]
                     )
+                else:
+                    self.channel = None
             else:
                 self.channel = None
             self.created = config["created"]\
@@ -61,20 +63,24 @@ class InlineHook(
                 if isinstance(config["status"],
                               inline_hook_status.InlineHookStatus):
                     self.status = config["status"]
-                else:
+                elif config["status"] is not None:
                     self.status = inline_hook_status.InlineHookStatus(
                         config["status"].upper()
                     )
+                else:
+                    self.status = None
             else:
                 self.status = None
             if "type" in config:
                 if isinstance(config["type"],
                               inline_hook_type.InlineHookType):
                     self.type = config["type"]
-                else:
+                elif config["type"] is not None:
                     self.type = inline_hook_type.InlineHookType(
                         config["type"].upper()
                     )
+                else:
+                    self.type = None
             else:
                 self.type = None
             self.version = config["version"]\

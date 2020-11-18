@@ -19,9 +19,9 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.provisioning_deprovisioned_condition\
+from okta.models import provisioning_deprovisioned_condition\
     as provisioning_deprovisioned_condition
-import okta.models.provisioning_suspended_condition\
+from okta.models import provisioning_suspended_condition\
     as provisioning_suspended_condition
 
 
@@ -39,20 +39,24 @@ class ProvisioningConditions(
                 if isinstance(config["deprovisioned"],
                               provisioning_deprovisioned_condition.ProvisioningDeprovisionedCondition):
                     self.deprovisioned = config["deprovisioned"]
-                else:
+                elif config["deprovisioned"] is not None:
                     self.deprovisioned = provisioning_deprovisioned_condition.ProvisioningDeprovisionedCondition(
                         config["deprovisioned"]
                     )
+                else:
+                    self.deprovisioned = None
             else:
                 self.deprovisioned = None
             if "suspended" in config:
                 if isinstance(config["suspended"],
                               provisioning_suspended_condition.ProvisioningSuspendedCondition):
                     self.suspended = config["suspended"]
-                else:
+                elif config["suspended"] is not None:
                     self.suspended = provisioning_suspended_condition.ProvisioningSuspendedCondition(
                         config["suspended"]
                     )
+                else:
+                    self.suspended = None
             else:
                 self.suspended = None
         else:

@@ -20,11 +20,11 @@ limitations under the License.
 
 from okta.okta_object import OktaObject
 from okta.okta_collection import OktaCollection
-import okta.models.session_authentication_method\
+from okta.models import session_authentication_method\
     as session_authentication_method
-import okta.models.session_identity_provider\
+from okta.models import session_identity_provider\
     as session_identity_provider
-import okta.models.session_status\
+from okta.models import session_status\
     as session_status
 
 
@@ -55,10 +55,12 @@ class Session(
                 if isinstance(config["idp"],
                               session_identity_provider.SessionIdentityProvider):
                     self.idp = config["idp"]
-                else:
+                elif config["idp"] is not None:
                     self.idp = session_identity_provider.SessionIdentityProvider(
                         config["idp"]
                     )
+                else:
+                    self.idp = None
             else:
                 self.idp = None
             self.last_factor_verification = config["lastFactorVerification"]\
@@ -71,10 +73,12 @@ class Session(
                 if isinstance(config["status"],
                               session_status.SessionStatus):
                     self.status = config["status"]
-                else:
+                elif config["status"] is not None:
                     self.status = session_status.SessionStatus(
                         config["status"].upper()
                     )
+                else:
+                    self.status = None
             else:
                 self.status = None
             self.user_id = config["userId"]\

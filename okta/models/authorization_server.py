@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.okta_object import OktaObject
 from okta.okta_collection import OktaCollection
-import okta.models.authorization_server_credentials\
+from okta.models import authorization_server_credentials\
     as authorization_server_credentials
 
 
@@ -47,10 +47,12 @@ class AuthorizationServer(
                 if isinstance(config["credentials"],
                               authorization_server_credentials.AuthorizationServerCredentials):
                     self.credentials = config["credentials"]
-                else:
+                elif config["credentials"] is not None:
                     self.credentials = authorization_server_credentials.AuthorizationServerCredentials(
                         config["credentials"]
                     )
+                else:
+                    self.credentials = None
             else:
                 self.credentials = None
             self.description = config["description"]\

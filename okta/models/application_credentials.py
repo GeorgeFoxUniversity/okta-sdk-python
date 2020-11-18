@@ -19,9 +19,9 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.application_credentials_signing\
+from okta.models import application_credentials_signing\
     as application_credentials_signing
-import okta.models.application_credentials_username_template\
+from okta.models import application_credentials_username_template\
     as application_credentials_username_template
 
 
@@ -39,20 +39,24 @@ class ApplicationCredentials(
                 if isinstance(config["signing"],
                               application_credentials_signing.ApplicationCredentialsSigning):
                     self.signing = config["signing"]
-                else:
+                elif config["signing"] is not None:
                     self.signing = application_credentials_signing.ApplicationCredentialsSigning(
                         config["signing"]
                     )
+                else:
+                    self.signing = None
             else:
                 self.signing = None
             if "userNameTemplate" in config:
                 if isinstance(config["userNameTemplate"],
                               application_credentials_username_template.ApplicationCredentialsUsernameTemplate):
                     self.user_name_template = config["userNameTemplate"]
-                else:
+                elif config["userNameTemplate"] is not None:
                     self.user_name_template = application_credentials_username_template.ApplicationCredentialsUsernameTemplate(
                         config["userNameTemplate"]
                     )
+                else:
+                    self.user_name_template = None
             else:
                 self.user_name_template = None
         else:

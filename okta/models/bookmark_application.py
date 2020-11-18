@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.models.application\
     import Application
-import okta.models.bookmark_application_settings\
+from okta.models import bookmark_application_settings\
     as bookmark_application_settings
 
 
@@ -41,10 +41,12 @@ class BookmarkApplication(
                 if isinstance(config["settings"],
                               bookmark_application_settings.BookmarkApplicationSettings):
                     self.settings = config["settings"]
-                else:
+                elif config["settings"] is not None:
                     self.settings = bookmark_application_settings.BookmarkApplicationSettings(
                         config["settings"]
                     )
+                else:
+                    self.settings = None
             else:
                 self.settings = None
         else:

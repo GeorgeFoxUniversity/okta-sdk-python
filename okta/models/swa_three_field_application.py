@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.models.browser_plugin_application\
     import BrowserPluginApplication
-import okta.models.swa_three_field_application_settings\
+from okta.models import swa_three_field_application_settings\
     as swa_three_field_application_settings
 
 
@@ -40,10 +40,12 @@ class SwaThreeFieldApplication(
                 if isinstance(config["settings"],
                               swa_three_field_application_settings.SwaThreeFieldApplicationSettings):
                     self.settings = config["settings"]
-                else:
+                elif config["settings"] is not None:
                     self.settings = swa_three_field_application_settings.SwaThreeFieldApplicationSettings(
                         config["settings"]
                     )
+                else:
+                    self.settings = None
             else:
                 self.settings = None
         else:

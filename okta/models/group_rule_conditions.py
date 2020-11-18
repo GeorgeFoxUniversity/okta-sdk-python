@@ -19,9 +19,9 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.group_rule_expression\
+from okta.models import group_rule_expression\
     as group_rule_expression
-import okta.models.group_rule_people_condition\
+from okta.models import group_rule_people_condition\
     as group_rule_people_condition
 
 
@@ -39,20 +39,24 @@ class GroupRuleConditions(
                 if isinstance(config["expression"],
                               group_rule_expression.GroupRuleExpression):
                     self.expression = config["expression"]
-                else:
+                elif config["expression"] is not None:
                     self.expression = group_rule_expression.GroupRuleExpression(
                         config["expression"]
                     )
+                else:
+                    self.expression = None
             else:
                 self.expression = None
             if "people" in config:
                 if isinstance(config["people"],
                               group_rule_people_condition.GroupRulePeopleCondition):
                     self.people = config["people"]
-                else:
+                elif config["people"] is not None:
                     self.people = group_rule_people_condition.GroupRulePeopleCondition(
                         config["people"]
                     )
+                else:
+                    self.people = None
             else:
                 self.people = None
         else:

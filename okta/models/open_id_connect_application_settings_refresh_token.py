@@ -19,43 +19,43 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-from okta.models import platform_condition_evaluator_platform_operating_system\
-    as platform_condition_evaluator_platform_operating_system
+from okta.models import open_id_connect_refresh_token_rotation_type\
+    as open_id_connect_refresh_token_rotation_type
 
 
-class PlatformConditionEvaluatorPlatform(
+class OpenIdConnectApplicationSettingsRefreshToken(
     OktaObject
 ):
     """
-    A class for PlatformConditionEvaluatorPlatform objects.
+    A class for OpenIdConnectApplicationSettingsRefreshToken objects.
     """
 
     def __init__(self, config=None):
         super().__init__(config)
         if config:
-            if "os" in config:
-                if isinstance(config["os"],
-                              platform_condition_evaluator_platform_operating_system.PlatformConditionEvaluatorPlatformOperatingSystem):
-                    self.os = config["os"]
-                elif config["os"] is not None:
-                    self.os = platform_condition_evaluator_platform_operating_system.PlatformConditionEvaluatorPlatformOperatingSystem(
-                        config["os"]
+            self.leeway = config["leeway"]\
+                if "leeway" in config else None
+            if "rotationType" in config:
+                if isinstance(config["rotationType"],
+                              open_id_connect_refresh_token_rotation_type.OpenIdConnectRefreshTokenRotationType):
+                    self.rotation_type = config["rotationType"]
+                elif config["rotationType"] is not None:
+                    self.rotation_type = open_id_connect_refresh_token_rotation_type.OpenIdConnectRefreshTokenRotationType(
+                        config["rotationType"].upper()
                     )
                 else:
-                    self.os = None
+                    self.rotation_type = None
             else:
-                self.os = None
-            self.type = config["type"]\
-                if "type" in config else None
+                self.rotation_type = None
         else:
-            self.os = None
-            self.type = None
+            self.leeway = None
+            self.rotation_type = None
 
     def request_format(self):
         parent_req_format = super().request_format()
         current_obj_format = {
-            "os": self.os,
-            "type": self.type
+            "leeway": self.leeway,
+            "rotation_type": self.rotation_type
         }
         parent_req_format.update(current_obj_format)
         return parent_req_format

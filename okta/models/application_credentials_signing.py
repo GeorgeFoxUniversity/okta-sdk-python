@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.application_credentials_signing_use\
+from okta.models import application_credentials_signing_use\
     as application_credentials_signing_use
 
 
@@ -45,10 +45,12 @@ class ApplicationCredentialsSigning(
                 if isinstance(config["use"],
                               application_credentials_signing_use.ApplicationCredentialsSigningUse):
                     self.use = config["use"]
-                else:
+                elif config["use"] is not None:
                     self.use = application_credentials_signing_use.ApplicationCredentialsSigningUse(
                         config["use"].upper()
                     )
+                else:
+                    self.use = None
             else:
                 self.use = None
         else:

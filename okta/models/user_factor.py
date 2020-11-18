@@ -19,13 +19,13 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.factor_type\
+from okta.models import factor_type\
     as factor_type
-import okta.models.factor_provider\
+from okta.models import factor_provider\
     as factor_provider
-import okta.models.factor_status\
+from okta.models import factor_status\
     as factor_status
-import okta.models.verify_factor_request\
+from okta.models import verify_factor_request\
     as verify_factor_request
 
 
@@ -49,10 +49,12 @@ class UserFactor(
                 if isinstance(config["factorType"],
                               factor_type.FactorType):
                     self.factor_type = config["factorType"]
-                else:
+                elif config["factorType"] is not None:
                     self.factor_type = factor_type.FactorType(
                         config["factorType"].upper()
                     )
+                else:
+                    self.factor_type = None
             else:
                 self.factor_type = None
             self.id = config["id"]\
@@ -63,30 +65,36 @@ class UserFactor(
                 if isinstance(config["provider"],
                               factor_provider.FactorProvider):
                     self.provider = config["provider"]
-                else:
+                elif config["provider"] is not None:
                     self.provider = factor_provider.FactorProvider(
                         config["provider"].upper()
                     )
+                else:
+                    self.provider = None
             else:
                 self.provider = None
             if "status" in config:
                 if isinstance(config["status"],
                               factor_status.FactorStatus):
                     self.status = config["status"]
-                else:
+                elif config["status"] is not None:
                     self.status = factor_status.FactorStatus(
                         config["status"].upper()
                     )
+                else:
+                    self.status = None
             else:
                 self.status = None
             if "verify" in config:
                 if isinstance(config["verify"],
                               verify_factor_request.VerifyFactorRequest):
                     self.verify = config["verify"]
-                else:
+                elif config["verify"] is not None:
                     self.verify = verify_factor_request.VerifyFactorRequest(
                         config["verify"]
                     )
+                else:
+                    self.verify = None
             else:
                 self.verify = None
         else:

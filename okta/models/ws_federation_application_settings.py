@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.models.application_settings\
     import ApplicationSettings
-import okta.models.ws_federation_application_settings_application\
+from okta.models import ws_federation_application_settings_application\
     as ws_federation_application_settings_application
 
 
@@ -38,10 +38,12 @@ class WsFederationApplicationSettings(
                 if isinstance(config["app"],
                               ws_federation_application_settings_application.WsFederationApplicationSettingsApplication):
                     self.app = config["app"]
-                else:
+                elif config["app"] is not None:
                     self.app = ws_federation_application_settings_application.WsFederationApplicationSettingsApplication(
                         config["app"]
                     )
+                else:
+                    self.app = None
             else:
                 self.app = None
         else:

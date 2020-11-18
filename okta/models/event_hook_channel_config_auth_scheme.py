@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.event_hook_channel_config_auth_scheme_type\
+from okta.models import event_hook_channel_config_auth_scheme_type\
     as event_hook_channel_config_auth_scheme_type
 
 
@@ -39,10 +39,12 @@ class EventHookChannelConfigAuthScheme(
                 if isinstance(config["type"],
                               event_hook_channel_config_auth_scheme_type.EventHookChannelConfigAuthSchemeType):
                     self.type = config["type"]
-                else:
+                elif config["type"] is not None:
                     self.type = event_hook_channel_config_auth_scheme_type.EventHookChannelConfigAuthSchemeType(
                         config["type"].upper()
                     )
+                else:
+                    self.type = None
             else:
                 self.type = None
             self.value = config["value"]\

@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.models.user_factor\
     import UserFactor
-import okta.models.security_question_user_factor_profile\
+from okta.models import security_question_user_factor_profile\
     as security_question_user_factor_profile
 
 
@@ -39,10 +39,12 @@ class SecurityQuestionUserFactor(
                 if isinstance(config["profile"],
                               security_question_user_factor_profile.SecurityQuestionUserFactorProfile):
                     self.profile = config["profile"]
-                else:
+                elif config["profile"] is not None:
                     self.profile = security_question_user_factor_profile.SecurityQuestionUserFactorProfile(
                         config["profile"]
                     )
+                else:
+                    self.profile = None
             else:
                 self.profile = None
         else:

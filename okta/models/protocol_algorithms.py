@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.protocol_algorithm_type\
+from okta.models import protocol_algorithm_type\
     as protocol_algorithm_type
 
 
@@ -37,20 +37,24 @@ class ProtocolAlgorithms(
                 if isinstance(config["request"],
                               protocol_algorithm_type.ProtocolAlgorithmType):
                     self.request = config["request"]
-                else:
+                elif config["request"] is not None:
                     self.request = protocol_algorithm_type.ProtocolAlgorithmType(
                         config["request"]
                     )
+                else:
+                    self.request = None
             else:
                 self.request = None
             if "response" in config:
                 if isinstance(config["response"],
                               protocol_algorithm_type.ProtocolAlgorithmType):
                     self.response = config["response"]
-                else:
+                elif config["response"] is not None:
                     self.response = protocol_algorithm_type.ProtocolAlgorithmType(
                         config["response"]
                     )
+                else:
+                    self.response = None
             else:
                 self.response = None
         else:

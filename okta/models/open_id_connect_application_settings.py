@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.models.application_settings\
     import ApplicationSettings
-import okta.models.open_id_connect_application_settings_client\
+from okta.models import open_id_connect_application_settings_client\
     as open_id_connect_application_settings_client
 
 
@@ -38,10 +38,12 @@ class OpenIdConnectApplicationSettings(
                 if isinstance(config["oauthClient"],
                               open_id_connect_application_settings_client.OpenIdConnectApplicationSettingsClient):
                     self.oauth_client = config["oauthClient"]
-                else:
+                elif config["oauthClient"] is not None:
                     self.oauth_client = open_id_connect_application_settings_client.OpenIdConnectApplicationSettingsClient(
                         config["oauthClient"]
                     )
+                else:
+                    self.oauth_client = None
             else:
                 self.oauth_client = None
         else:

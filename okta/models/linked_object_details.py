@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.linked_object_details_type\
+from okta.models import linked_object_details_type\
     as linked_object_details_type
 
 
@@ -43,10 +43,12 @@ class LinkedObjectDetails(
                 if isinstance(config["type"],
                               linked_object_details_type.LinkedObjectDetailsType):
                     self.type = config["type"]
-                else:
+                elif config["type"] is not None:
                     self.type = linked_object_details_type.LinkedObjectDetailsType(
                         config["type"].upper()
                     )
+                else:
+                    self.type = None
             else:
                 self.type = None
         else:

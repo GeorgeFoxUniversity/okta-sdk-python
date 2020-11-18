@@ -20,9 +20,9 @@ limitations under the License.
 
 from okta.okta_object import OktaObject
 from okta.okta_collection import OktaCollection
-import okta.models.event_hook_channel_config_auth_scheme\
+from okta.models import event_hook_channel_config_auth_scheme\
     as event_hook_channel_config_auth_scheme
-import okta.models.event_hook_channel_config_header\
+from okta.models import event_hook_channel_config_header\
     as event_hook_channel_config_header
 
 
@@ -40,10 +40,12 @@ class EventHookChannelConfig(
                 if isinstance(config["authScheme"],
                               event_hook_channel_config_auth_scheme.EventHookChannelConfigAuthScheme):
                     self.auth_scheme = config["authScheme"]
-                else:
+                elif config["authScheme"] is not None:
                     self.auth_scheme = event_hook_channel_config_auth_scheme.EventHookChannelConfigAuthScheme(
                         config["authScheme"]
                     )
+                else:
+                    self.auth_scheme = None
             else:
                 self.auth_scheme = None
             self.headers = OktaCollection.form_list(

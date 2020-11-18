@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.models.application_settings\
     import ApplicationSettings
-import okta.models.swa_application_settings_application\
+from okta.models import swa_application_settings_application\
     as swa_application_settings_application
 
 
@@ -38,10 +38,12 @@ class SwaApplicationSettings(
                 if isinstance(config["app"],
                               swa_application_settings_application.SwaApplicationSettingsApplication):
                     self.app = config["app"]
-                else:
+                elif config["app"] is not None:
                     self.app = swa_application_settings_application.SwaApplicationSettingsApplication(
                         config["app"]
                     )
+                else:
+                    self.app = None
             else:
                 self.app = None
         else:

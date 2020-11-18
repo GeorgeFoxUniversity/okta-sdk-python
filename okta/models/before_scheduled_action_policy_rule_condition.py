@@ -19,9 +19,9 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.duration\
+from okta.models import duration\
     as duration
-import okta.models.scheduled_user_lifecycle_action\
+from okta.models import scheduled_user_lifecycle_action\
     as scheduled_user_lifecycle_action
 
 
@@ -39,20 +39,24 @@ class BeforeScheduledActionPolicyRuleCondition(
                 if isinstance(config["duration"],
                               duration.Duration):
                     self.duration = config["duration"]
-                else:
+                elif config["duration"] is not None:
                     self.duration = duration.Duration(
                         config["duration"]
                     )
+                else:
+                    self.duration = None
             else:
                 self.duration = None
             if "lifecycleAction" in config:
                 if isinstance(config["lifecycleAction"],
                               scheduled_user_lifecycle_action.ScheduledUserLifecycleAction):
                     self.lifecycle_action = config["lifecycleAction"]
-                else:
+                elif config["lifecycleAction"] is not None:
                     self.lifecycle_action = scheduled_user_lifecycle_action.ScheduledUserLifecycleAction(
                         config["lifecycleAction"]
                     )
+                else:
+                    self.lifecycle_action = None
             else:
                 self.lifecycle_action = None
         else:

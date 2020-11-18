@@ -20,9 +20,9 @@ limitations under the License.
 
 from okta.okta_object import OktaObject
 from okta.okta_collection import OktaCollection
-import okta.models.group_profile\
+from okta.models import group_profile\
     as group_profile
-import okta.models.group_type\
+from okta.models import group_type\
     as group_type
 
 
@@ -57,20 +57,24 @@ class Group(
                 if isinstance(config["profile"],
                               group_profile.GroupProfile):
                     self.profile = config["profile"]
-                else:
+                elif config["profile"] is not None:
                     self.profile = group_profile.GroupProfile(
                         config["profile"]
                     )
+                else:
+                    self.profile = None
             else:
                 self.profile = None
             if "type" in config:
                 if isinstance(config["type"],
                               group_type.GroupType):
                     self.type = config["type"]
-                else:
+                elif config["type"] is not None:
                     self.type = group_type.GroupType(
                         config["type"].upper()
                     )
+                else:
+                    self.type = None
             else:
                 self.type = None
         else:

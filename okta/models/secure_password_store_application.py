@@ -20,9 +20,9 @@ limitations under the License.
 
 from okta.models.application\
     import Application
-import okta.models.scheme_application_credentials\
+from okta.models import scheme_application_credentials\
     as scheme_application_credentials
-import okta.models.secure_password_store_application_settings\
+from okta.models import secure_password_store_application_settings\
     as secure_password_store_application_settings
 
 
@@ -41,10 +41,12 @@ class SecurePasswordStoreApplication(
                 if isinstance(config["credentials"],
                               scheme_application_credentials.SchemeApplicationCredentials):
                     self.credentials = config["credentials"]
-                else:
+                elif config["credentials"] is not None:
                     self.credentials = scheme_application_credentials.SchemeApplicationCredentials(
                         config["credentials"]
                     )
+                else:
+                    self.credentials = None
             else:
                 self.credentials = None
             self.name = config["name"]\
@@ -53,10 +55,12 @@ class SecurePasswordStoreApplication(
                 if isinstance(config["settings"],
                               secure_password_store_application_settings.SecurePasswordStoreApplicationSettings):
                     self.settings = config["settings"]
-                else:
+                elif config["settings"] is not None:
                     self.settings = secure_password_store_application_settings.SecurePasswordStoreApplicationSettings(
                         config["settings"]
                     )
+                else:
+                    self.settings = None
             else:
                 self.settings = None
         else:

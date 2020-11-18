@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.role_type\
+from okta.models import role_type\
     as role_type
 
 
@@ -37,10 +37,12 @@ class AssignRoleRequest(
                 if isinstance(config["type"],
                               role_type.RoleType):
                     self.type = config["type"]
-                else:
+                elif config["type"] is not None:
                     self.type = role_type.RoleType(
                         config["type"].upper()
                     )
+                else:
+                    self.type = None
             else:
                 self.type = None
         else:

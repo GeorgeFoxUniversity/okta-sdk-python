@@ -66,14 +66,29 @@ You'll also need
 Construct a client instance by passing it your Okta domain name and API token:
 
 ```py
+import asyncio
+
 from okta.client import Client as OktaClient
+
 # Instantiating with a Python dictionary in the constructor
 config = {
-    'orgUrl': 'https://test.okta.com',
+    'orgUrl': 'https://{yourOktaDomain}',
     'token': 'YOUR_API_TOKEN'
 }
 okta_client = OktaClient(config)
 
+# example of usage, list all users and print their first name and last name
+async def main():
+    users, resp, err = await okta_client.list_users()
+    for user in users:
+        print(user.profile.first_name, user.profile.last_name)
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+```
+
+Another way to instantiate okta_client (config should be provided in other place as described below):
+```py
 # Instantiating without in-text credentials
 okta_client = OktaClient()
 ```
@@ -84,20 +99,79 @@ okta_client = OktaClient()
 
 Okta allows you to interact with Okta APIs using scoped OAuth 2.0 access tokens. Each access token enables the bearer to perform specific actions on specific Okta endpoints, with that ability controlled by which scopes the access token contains.
 
-This SDK supports this feature (OAuth 2.0) only for service-to-service applications. Check out [our guides][oauth-guides] to learn more about how to register a new service application using a private and public key pair.
+This SDK supports this feature (OAuth 2.0) only for service-to-service applications. Check out [our guides](https://developer.okta.com/docs/guides/implement-oauth-for-okta-serviceapp/overview/) to learn more about how to register a new service application using a private and public key pair.
 
 When using this approach you won't need an API Token because the SDK will request an access token for you. In order to use OAuth 2.0, construct a client instance by passing the following parameters:
 
 ```py
 from okta.client import Client as OktaClient
 config = {
-    'orgUrl': 'https://test.okta.com',
+    'orgUrl': 'https://{yourOktaDomain}',
     'authorizationMode': 'PrivateKey',
-    'clientId': 'YOUR_CLIENT_ID',
+    'clientId': '{yourClientId}',
     'scopes': ['okta.users.manage'],
-    'privateKey': {'JsonWebKey'}
+    'privateKey': 'YOUR_PRIVATE_JWK' # this parameter should be type of str
 }
-client = OktaClient(config)
+okta_client = OktaClient(config)
+
+
+# example of usage, list all users and print their first name and last name
+async def main():
+    users, resp, err = await okta_client.list_users()
+    for user in users:
+        print(user.profile.first_name, user.profile.last_name)
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+```
+
+Note, that privateKey can be passed in JWK format or in PEM format, i.e. (examples generated with https://mkjwk.org):
+```
+{
+    "p": "4VmEO2ztlIHvalMHX797rWhETbKgB6bRbdGevYpRLZH167hKHB5vsuRjIAXJdujQw8W3rnas9Z-_Ddv1TbR5Qnz0UmhnxQAIbdDDUE9r5P_LEholrjY9Jz0P-W4jey-7cDATeITYHb3t67HcIwVbxQF5fkRdJAhfO029RqkH3OE",
+    "kty": "RSA",
+    "q": "x8ngsUMrDGReVVpeGdlZzGTSFxrNP89DF4WEQZ7zCpSe3_GpuUPbzgslYQEiX6XJY5ssavavVNOmmQEAt0xsMcxxVOPYCYy7LBE8cJQiFb_bMf2H1-zTlPn_KF4D10h45cLXhu-xh4c52Rh9WDMYZmKWLkAJQ6L_eueGoZkIDmU",
+    "d": "R38UamnZiEhOLxD7FYUN5AKj9mHQneRWizblxfNq2T1Nfk4matfZrrlMq_nz9tYZ3-TOCu3u-7k_igM0Tml365mbU_HzkfCrD-ou7cGSrqNgnipj_VQSgJfKRFKATEf4hMfdpKSd4rZzf8OJnq8s-kpRVC4kdHJtJjja59VvHEQRIrN_dkycNHSBWu5UjZbXOO5X3mjwuIh9gpLGZ-nHTqgTpT324q5BLVsH8_ywRGifIj-HQL1O5bJO2Q2_18iL1TbnMSbDwrKdb1edb4bgDuWB4o0xSTXsherTgeXu76gN9FY28tuAKSd34yqp7GZaYcjtkskbWPRtYhOID2cOgQ",
+    "e": "AQAB",
+    "use": "sig",
+    "kid": "test",
+    "qi": "FZGFuvW1W9VF31JyrMYJy_BH7vja3d9iZlhFzttNZ-wmiXG4irrI_fLJgmXK6dI3MfIhKPAYi9nnza2kcR1qEV9QObA4NV86RWnc8sAHbDGooe9VK5eJ5jjD7Tq_ZZiLiHGOZit3HylNilOb0k3VsgMcp0F3ZQaMbg35K9rSgZE",
+    "dp": "i4D6HjupvCTQDNdHmluU-d2xYxQwg2we_EgnaBkHdhmEzx8wKcYhyfIe90T92jH4gymUM1neatQw1yiS7D7MTn_CVH2zt730ed8h-kageYxsr1EmgHmtU-w2RmiLaIg9Fg99Dj_W9lqMvjtGFxwLGqN2DdfOfS79nV3bzbF4X6E",
+    "alg": "RS256",
+    "dq": "CT79iBacsmkeuIKDIl0du8jatDkIULCt4TPLqCHMC6xPIfwUJ7_NN17qru-XgKeyh0qSJq0d9iYJasFSICmIRFG62PvmbqK1stdlXaxtW2ZSpaCfHc4XCKj9NwgK03bGKZP314XWSHhoo_RvMJrEwVBEtQU_qIKtoil-4JGtfsU",
+    "n": "r95K3WIN8-4dB-tEKHjyTIIZZUMbHz8ad5oBX2BGiGxfPGfHbz2RH4QLT9ffzL-tgEo8IKs0Myh0VTwauiwz0cdHuS2gUTasK9OsosX1h1scSu_eZ-g-__lXBogU-SvBXBAgjv8hdcZjqWYQwmhJp2Ilv0CuXKxQwZyjso775PDjWDCH5HkVcSxHyUvpThLfWfkfz5PNDZvRpuPltv55ILRaVZhwPb7VXLAm2ebfeYUdybUKpGnEogKQdaL7TdNvP-HRnUSXTiYeXWHzU04FaXJ7yLmtXOQ52FT9dwkwLrCDOmDSBGafZ9asUtgOKhKN6wQW5mndhMK_1zThfjZyxQ"
+}
+```
+or
+```
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCv3krdYg3z7h0H
+60QoePJMghllQxsfPxp3mgFfYEaIbF88Z8dvPZEfhAtP19/Mv62ASjwgqzQzKHRV
+PBq6LDPRx0e5LaBRNqwr06yixfWHWxxK795n6D7/+VcGiBT5K8FcECCO/yF1xmOp
+ZhDCaEmnYiW/QK5crFDBnKOyjvvk8ONYMIfkeRVxLEfJS+lOEt9Z+R/Pk80Nm9Gm
+4+W2/nkgtFpVmHA9vtVcsCbZ5t95hR3JtQqkacSiApB1ovtN028/4dGdRJdOJh5d
+YfNTTgVpcnvIua1c5DnYVP13CTAusIM6YNIEZp9n1qxS2A4qEo3rBBbmad2Ewr/X
+NOF+NnLFAgMBAAECggEAR38UamnZiEhOLxD7FYUN5AKj9mHQneRWizblxfNq2T1N
+fk4matfZrrlMq/nz9tYZ3+TOCu3u+7k/igM0Tml365mbU/HzkfCrD+ou7cGSrqNg
+nipj/VQSgJfKRFKATEf4hMfdpKSd4rZzf8OJnq8s+kpRVC4kdHJtJjja59VvHEQR
+IrN/dkycNHSBWu5UjZbXOO5X3mjwuIh9gpLGZ+nHTqgTpT324q5BLVsH8/ywRGif
+Ij+HQL1O5bJO2Q2/18iL1TbnMSbDwrKdb1edb4bgDuWB4o0xSTXsherTgeXu76gN
+9FY28tuAKSd34yqp7GZaYcjtkskbWPRtYhOID2cOgQKBgQDhWYQ7bO2Uge9qUwdf
+v3utaERNsqAHptFt0Z69ilEtkfXruEocHm+y5GMgBcl26NDDxbeudqz1n78N2/VN
+tHlCfPRSaGfFAAht0MNQT2vk/8sSGiWuNj0nPQ/5biN7L7twMBN4hNgdve3rsdwj
+BVvFAXl+RF0kCF87Tb1GqQfc4QKBgQDHyeCxQysMZF5VWl4Z2VnMZNIXGs0/z0MX
+hYRBnvMKlJ7f8am5Q9vOCyVhASJfpcljmyxq9q9U06aZAQC3TGwxzHFU49gJjLss
+ETxwlCIVv9sx/YfX7NOU+f8oXgPXSHjlwteG77GHhznZGH1YMxhmYpYuQAlDov96
+54ahmQgOZQKBgQCLgPoeO6m8JNAM10eaW5T53bFjFDCDbB78SCdoGQd2GYTPHzAp
+xiHJ8h73RP3aMfiDKZQzWd5q1DDXKJLsPsxOf8JUfbO3vfR53yH6RqB5jGyvUSaA
+ea1T7DZGaItoiD0WD30OP9b2Woy+O0YXHAsao3YN1859Lv2dXdvNsXhfoQKBgAk+
+/YgWnLJpHriCgyJdHbvI2rQ5CFCwreEzy6ghzAusTyH8FCe/zTde6q7vl4CnsodK
+kiatHfYmCWrBUiApiERRutj75m6itbLXZV2sbVtmUqWgnx3OFwio/TcICtN2ximT
+99eF1kh4aKP0bzCaxMFQRLUFP6iCraIpfuCRrX7FAoGAFZGFuvW1W9VF31JyrMYJ
+y/BH7vja3d9iZlhFzttNZ+wmiXG4irrI/fLJgmXK6dI3MfIhKPAYi9nnza2kcR1q
+EV9QObA4NV86RWnc8sAHbDGooe9VK5eJ5jjD7Tq/ZZiLiHGOZit3HylNilOb0k3V
+sgMcp0F3ZQaMbg35K9rSgZE=
+-----END PRIVATE KEY-----
 ```
 
 > Using a Python dictionary to hard-code the Okta domain and API token is encouraged for development; In production, you should use a more secure way of storing these values. This library supports a few different configuration sources, covered in the [configuration reference](#configuration-reference) section.
@@ -112,13 +186,26 @@ from okta.client import Client as OktaClient
 from project.custom.request_executor_impl import RequestExecImpl
 from project.custom.http_client_impl import HTTPClientImpl
 from project.custom.cache_impl import CacheImpl
+
+
 config = {
-    'orgUrl': 'https://test.okta.com',
+    'orgUrl': 'https://{yourOktaDomain}',
     'token': 'YOUR_API_TOKEN',
     'requestExecutor': RequestExecImpl,
     'httpClient': HTTPClientImpl,
-    'cacheManager': CacheImpl
+    'cacheManager': CacheImpl(), # pass instance of CacheImpl
+    'cache': {'enabled': True}
 }
+
+
+async def main():
+    client = OktaClient(config)
+    user_info, resp, err = await client.get_user({YOUR_USER_ID})
+    print(user_info)
+
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
 ```
 
 ### Extending or Creating New Classes
@@ -126,22 +213,100 @@ config = {
 Example: You can create a custom cache driver by implementing `okta.cache.cache`
 
 ```py
+# Fully working example for Custom Cache class
 from okta.cache.cache import Cache
 
-class CustomCache(Cache):
-  def __init__(self, params):
-    super().__init__()
-    # Constructor
 
-  # Must implement all methods from the Cache class
-  def get(self, key):
-    # Implementation
+class CacheImpl(Cache):
+    def __init__(self):
+        super().__init__()
+        self.cache_dict = {}
 
-  """Rest of methods"""
-  ...
+    def add(self, key, value):
+        self.cache_dict[key] = value
+
+    def get(self, key):
+        return self.cache_dict.get(key, None)
+
+    def contains(self, key):
+        return key in self.cache_dict
+
+    def delete(self, key):
+        if self.contains(key):
+            del self.cache_dict[key]
 ```
 
-A similar approach can be used to extend `okta.request_executor` and `okta.http_client`.
+A similar approach can be used to extend `okta.request_executor`:
+```py
+from okta.request_executor import RequestExecutor
+
+
+class RequestExecImpl(RequestExecutor):
+    def __init__(self, config, cache, http_client=None):
+        super().__init__(config, cache, http_client)
+        # custom code
+
+    # Note, this method shoud be defined as async
+    async def create_request(self, method: str, url: str, body: dict = None,
+                             headers: dict = {}, oauth=False):
+        """
+        Creates request for request executor's HTTP client.
+
+        Args:
+            method (str): HTTP Method to be used
+            url (str): URL to send request to
+            body (dict, optional): Request body. Defaults to None.
+            headers (dict, optional): Request headers. Defaults to {}.
+
+        Returns:
+            dict, Exception: Tuple of Dictionary repr of HTTP request and
+            exception raised during execution
+        """
+        # custom code
+
+    # Note, this method shoud be defined as async
+    async def execute(self, request, response_type=None):
+        """
+        This function is the high level request execution method. Performs the
+        API call and returns a formatted response object
+
+        Args:
+            request (dict): dictionary object containing request details
+
+        Returns:
+            (OktaAPIResponse, Exception): Response obj for the Okta API, Error
+        """
+        # custom code
+```
+
+and `okta.http_client`:
+```py
+from okta.http_client import HTTPClient
+
+
+class HTTPClientImpl(HTTPClient):
+    def __init__(self, http_config={}):
+        super().__init__(http_config)
+        # custom code
+
+    # Note, this method shoud be defined as async
+    async def send_request(self, request):
+        """
+        This method fires HTTP requests
+
+        Arguments:
+            request {dict} -- This dictionary contains all information needed
+            for the request.
+            - HTTP method (as str)
+            - Headers (as dict)
+            - Request body (as dict)
+
+        Returns:
+            Tuple(RequestInfo, ClientResponse, JSONBody, ErrorObject)
+            -- A tuple containing the request and response of the HTTP call
+        """
+        # custom code
+```
 
 ## Usage guide
 

@@ -21,9 +21,9 @@ limitations under the License.
 from okta.models.policy\
     import Policy
 from okta.models.policy_type import PolicyType
-import okta.models.password_policy_conditions\
+from okta.models import password_policy_conditions\
     as password_policy_conditions
-import okta.models.password_policy_settings\
+from okta.models import password_policy_settings\
     as password_policy_settings
 
 
@@ -42,20 +42,24 @@ class PasswordPolicy(
                 if isinstance(config["conditions"],
                               password_policy_conditions.PasswordPolicyConditions):
                     self.conditions = config["conditions"]
-                else:
+                elif config["conditions"] is not None:
                     self.conditions = password_policy_conditions.PasswordPolicyConditions(
                         config["conditions"]
                     )
+                else:
+                    self.conditions = None
             else:
                 self.conditions = None
             if "settings" in config:
                 if isinstance(config["settings"],
                               password_policy_settings.PasswordPolicySettings):
                     self.settings = config["settings"]
-                else:
+                elif config["settings"] is not None:
                     self.settings = password_policy_settings.PasswordPolicySettings(
                         config["settings"]
                     )
+                else:
+                    self.settings = None
             else:
                 self.settings = None
         else:

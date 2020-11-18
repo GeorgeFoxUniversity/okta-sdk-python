@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.application_visibility_hide\
+from okta.models import application_visibility_hide\
     as application_visibility_hide
 
 
@@ -41,10 +41,12 @@ class ApplicationVisibility(
                 if isinstance(config["hide"],
                               application_visibility_hide.ApplicationVisibilityHide):
                     self.hide = config["hide"]
-                else:
+                elif config["hide"] is not None:
                     self.hide = application_visibility_hide.ApplicationVisibilityHide(
                         config["hide"]
                     )
+                else:
+                    self.hide = None
             else:
                 self.hide = None
         else:

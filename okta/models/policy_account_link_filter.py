@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.policy_account_link_filter_groups\
+from okta.models import policy_account_link_filter_groups\
     as policy_account_link_filter_groups
 
 
@@ -37,10 +37,12 @@ class PolicyAccountLinkFilter(
                 if isinstance(config["groups"],
                               policy_account_link_filter_groups.PolicyAccountLinkFilterGroups):
                     self.groups = config["groups"]
-                else:
+                elif config["groups"] is not None:
                     self.groups = policy_account_link_filter_groups.PolicyAccountLinkFilterGroups(
                         config["groups"]
                     )
+                else:
+                    self.groups = None
             else:
                 self.groups = None
         else:

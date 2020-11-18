@@ -19,9 +19,9 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.identity_provider_policy\
+from okta.models import identity_provider_policy\
     as identity_provider_policy
-import okta.models.protocol\
+from okta.models import protocol\
     as protocol
 
 
@@ -51,20 +51,24 @@ class IdentityProvider(
                 if isinstance(config["policy"],
                               identity_provider_policy.IdentityProviderPolicy):
                     self.policy = config["policy"]
-                else:
+                elif config["policy"] is not None:
                     self.policy = identity_provider_policy.IdentityProviderPolicy(
                         config["policy"]
                     )
+                else:
+                    self.policy = None
             else:
                 self.policy = None
             if "protocol" in config:
                 if isinstance(config["protocol"],
                               protocol.Protocol):
                     self.protocol = config["protocol"]
-                else:
+                elif config["protocol"] is not None:
                     self.protocol = protocol.Protocol(
                         config["protocol"]
                     )
+                else:
+                    self.protocol = None
             else:
                 self.protocol = None
             self.status = config["status"]\

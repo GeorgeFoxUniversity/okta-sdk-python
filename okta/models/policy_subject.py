@@ -20,9 +20,9 @@ limitations under the License.
 
 from okta.okta_object import OktaObject
 from okta.okta_collection import OktaCollection
-import okta.models.policy_subject_match_type\
+from okta.models import policy_subject_match_type\
     as policy_subject_match_type
-import okta.models.policy_user_name_template\
+from okta.models import policy_user_name_template\
     as policy_user_name_template
 
 
@@ -49,20 +49,24 @@ class PolicySubject(
                 if isinstance(config["matchType"],
                               policy_subject_match_type.PolicySubjectMatchType):
                     self.match_type = config["matchType"]
-                else:
+                elif config["matchType"] is not None:
                     self.match_type = policy_subject_match_type.PolicySubjectMatchType(
                         config["matchType"].upper()
                     )
+                else:
+                    self.match_type = None
             else:
                 self.match_type = None
             if "userNameTemplate" in config:
                 if isinstance(config["userNameTemplate"],
                               policy_user_name_template.PolicyUserNameTemplate):
                     self.user_name_template = config["userNameTemplate"]
-                else:
+                elif config["userNameTemplate"] is not None:
                     self.user_name_template = policy_user_name_template.PolicyUserNameTemplate(
                         config["userNameTemplate"]
                     )
+                else:
+                    self.user_name_template = None
             else:
                 self.user_name_template = None
         else:

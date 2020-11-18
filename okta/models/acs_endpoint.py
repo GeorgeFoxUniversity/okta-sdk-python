@@ -19,43 +19,31 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-from okta.models import platform_condition_evaluator_platform_operating_system\
-    as platform_condition_evaluator_platform_operating_system
 
 
-class PlatformConditionEvaluatorPlatform(
+class AcsEndpoint(
     OktaObject
 ):
     """
-    A class for PlatformConditionEvaluatorPlatform objects.
+    A class for AcsEndpoint objects.
     """
 
     def __init__(self, config=None):
         super().__init__(config)
         if config:
-            if "os" in config:
-                if isinstance(config["os"],
-                              platform_condition_evaluator_platform_operating_system.PlatformConditionEvaluatorPlatformOperatingSystem):
-                    self.os = config["os"]
-                elif config["os"] is not None:
-                    self.os = platform_condition_evaluator_platform_operating_system.PlatformConditionEvaluatorPlatformOperatingSystem(
-                        config["os"]
-                    )
-                else:
-                    self.os = None
-            else:
-                self.os = None
-            self.type = config["type"]\
-                if "type" in config else None
+            self.index = config["index"]\
+                if "index" in config else None
+            self.url = config["url"]\
+                if "url" in config else None
         else:
-            self.os = None
-            self.type = None
+            self.index = None
+            self.url = None
 
     def request_format(self):
         parent_req_format = super().request_format()
         current_obj_format = {
-            "os": self.os,
-            "type": self.type
+            "index": self.index,
+            "url": self.url
         }
         parent_req_format.update(current_obj_format)
         return parent_req_format

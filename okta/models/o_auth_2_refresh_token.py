@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.okta_object import OktaObject
 from okta.okta_collection import OktaCollection
-import okta.models.o_auth_2_actor\
+from okta.models import o_auth_2_actor\
     as o_auth_2_actor
 
 
@@ -46,10 +46,12 @@ class OAuth2RefreshToken(
                 if isinstance(config["createdBy"],
                               o_auth_2_actor.OAuth2Actor):
                     self.created_by = config["createdBy"]
-                else:
+                elif config["createdBy"] is not None:
                     self.created_by = o_auth_2_actor.OAuth2Actor(
                         config["createdBy"]
                     )
+                else:
+                    self.created_by = None
             else:
                 self.created_by = None
             self.expires_at = config["expiresAt"]\

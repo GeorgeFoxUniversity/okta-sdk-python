@@ -19,11 +19,11 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.password_credential\
+from okta.models import password_credential\
     as password_credential
-import okta.models.authentication_provider\
+from okta.models import authentication_provider\
     as authentication_provider
-import okta.models.recovery_question_credential\
+from okta.models import recovery_question_credential\
     as recovery_question_credential
 
 
@@ -41,30 +41,36 @@ class UserCredentials(
                 if isinstance(config["password"],
                               password_credential.PasswordCredential):
                     self.password = config["password"]
-                else:
+                elif config["password"] is not None:
                     self.password = password_credential.PasswordCredential(
                         config["password"]
                     )
+                else:
+                    self.password = None
             else:
                 self.password = None
             if "provider" in config:
                 if isinstance(config["provider"],
                               authentication_provider.AuthenticationProvider):
                     self.provider = config["provider"]
-                else:
+                elif config["provider"] is not None:
                     self.provider = authentication_provider.AuthenticationProvider(
                         config["provider"]
                     )
+                else:
+                    self.provider = None
             else:
                 self.provider = None
             if "recoveryQuestion" in config:
                 if isinstance(config["recoveryQuestion"],
                               recovery_question_credential.RecoveryQuestionCredential):
                     self.recovery_question = config["recoveryQuestion"]
-                else:
+                elif config["recoveryQuestion"] is not None:
                     self.recovery_question = recovery_question_credential.RecoveryQuestionCredential(
                         config["recoveryQuestion"]
                     )
+                else:
+                    self.recovery_question = None
             else:
                 self.recovery_question = None
         else:

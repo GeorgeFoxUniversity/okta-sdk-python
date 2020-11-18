@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.policy_people_condition\
+from okta.models import policy_people_condition\
     as policy_people_condition
 
 
@@ -37,10 +37,12 @@ class OktaSignOnPolicyConditions(
                 if isinstance(config["people"],
                               policy_people_condition.PolicyPeopleCondition):
                     self.people = config["people"]
-                else:
+                elif config["people"] is not None:
                     self.people = policy_people_condition.PolicyPeopleCondition(
                         config["people"]
                     )
+                else:
+                    self.people = None
             else:
                 self.people = None
         else:

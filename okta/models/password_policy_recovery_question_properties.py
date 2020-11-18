@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.password_policy_recovery_question_complexity\
+from okta.models import password_policy_recovery_question_complexity\
     as password_policy_recovery_question_complexity
 
 
@@ -37,10 +37,12 @@ class PasswordPolicyRecoveryQuestionProperties(
                 if isinstance(config["complexity"],
                               password_policy_recovery_question_complexity.PasswordPolicyRecoveryQuestionComplexity):
                     self.complexity = config["complexity"]
-                else:
+                elif config["complexity"] is not None:
                     self.complexity = password_policy_recovery_question_complexity.PasswordPolicyRecoveryQuestionComplexity(
                         config["complexity"]
                     )
+                else:
+                    self.complexity = None
             else:
                 self.complexity = None
         else:

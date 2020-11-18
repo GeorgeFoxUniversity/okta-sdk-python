@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.linked_object_details\
+from okta.models import linked_object_details\
     as linked_object_details
 
 
@@ -39,20 +39,24 @@ class LinkedObject(
                 if isinstance(config["associated"],
                               linked_object_details.LinkedObjectDetails):
                     self.associated = config["associated"]
-                else:
+                elif config["associated"] is not None:
                     self.associated = linked_object_details.LinkedObjectDetails(
                         config["associated"]
                     )
+                else:
+                    self.associated = None
             else:
                 self.associated = None
             if "primary" in config:
                 if isinstance(config["primary"],
                               linked_object_details.LinkedObjectDetails):
                     self.primary = config["primary"]
-                else:
+                elif config["primary"] is not None:
                     self.primary = linked_object_details.LinkedObjectDetails(
                         config["primary"]
                     )
+                else:
+                    self.primary = None
             else:
                 self.primary = None
         else:

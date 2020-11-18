@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.models.user_factor\
     import UserFactor
-import okta.models.sms_user_factor_profile\
+from okta.models import sms_user_factor_profile\
     as sms_user_factor_profile
 
 
@@ -39,10 +39,12 @@ class SmsUserFactor(
                 if isinstance(config["profile"],
                               sms_user_factor_profile.SmsUserFactorProfile):
                     self.profile = config["profile"]
-                else:
+                elif config["profile"] is not None:
                     self.profile = sms_user_factor_profile.SmsUserFactorProfile(
                         config["profile"]
                     )
+                else:
+                    self.profile = None
             else:
                 self.profile = None
         else:

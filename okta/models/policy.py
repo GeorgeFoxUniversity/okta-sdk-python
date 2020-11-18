@@ -19,9 +19,9 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.policy_rule_conditions\
+from okta.models import policy_rule_conditions\
     as policy_rule_conditions
-import okta.models.policy_type\
+from okta.models import policy_type\
     as policy_type
 
 
@@ -43,10 +43,12 @@ class Policy(
                 if isinstance(config["conditions"],
                               policy_rule_conditions.PolicyRuleConditions):
                     self.conditions = config["conditions"]
-                else:
+                elif config["conditions"] is not None:
                     self.conditions = policy_rule_conditions.PolicyRuleConditions(
                         config["conditions"]
                     )
+                else:
+                    self.conditions = None
             else:
                 self.conditions = None
             self.created = config["created"]\
@@ -69,10 +71,12 @@ class Policy(
                 if isinstance(config["type"],
                               policy_type.PolicyType):
                     self.type = config["type"]
-                else:
+                elif config["type"] is not None:
                     self.type = policy_type.PolicyType(
                         config["type"].upper()
                     )
+                else:
+                    self.type = None
             else:
                 self.type = None
         else:

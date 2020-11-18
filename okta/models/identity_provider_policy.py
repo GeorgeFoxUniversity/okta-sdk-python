@@ -21,11 +21,11 @@ limitations under the License.
 from okta.models.policy\
     import Policy
 from okta.models.policy_type import PolicyType
-import okta.models.policy_account_link\
+from okta.models import policy_account_link\
     as policy_account_link
-import okta.models.provisioning\
+from okta.models import provisioning\
     as provisioning
-import okta.models.policy_subject\
+from okta.models import policy_subject\
     as policy_subject
 
 
@@ -44,10 +44,12 @@ class IdentityProviderPolicy(
                 if isinstance(config["accountLink"],
                               policy_account_link.PolicyAccountLink):
                     self.account_link = config["accountLink"]
-                else:
+                elif config["accountLink"] is not None:
                     self.account_link = policy_account_link.PolicyAccountLink(
                         config["accountLink"]
                     )
+                else:
+                    self.account_link = None
             else:
                 self.account_link = None
             self.max_clock_skew = config["maxClockSkew"]\
@@ -56,20 +58,24 @@ class IdentityProviderPolicy(
                 if isinstance(config["provisioning"],
                               provisioning.Provisioning):
                     self.provisioning = config["provisioning"]
-                else:
+                elif config["provisioning"] is not None:
                     self.provisioning = provisioning.Provisioning(
                         config["provisioning"]
                     )
+                else:
+                    self.provisioning = None
             else:
                 self.provisioning = None
             if "subject" in config:
                 if isinstance(config["subject"],
                               policy_subject.PolicySubject):
                     self.subject = config["subject"]
-                else:
+                elif config["subject"] is not None:
                     self.subject = policy_subject.PolicySubject(
                         config["subject"]
                     )
+                else:
+                    self.subject = None
             else:
                 self.subject = None
         else:

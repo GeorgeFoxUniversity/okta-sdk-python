@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.ion_form\
+from okta.models import ion_form\
     as ion_form
 
 
@@ -37,10 +37,12 @@ class IonField(
                 if isinstance(config["form"],
                               ion_form.IonForm):
                     self.form = config["form"]
-                else:
+                elif config["form"] is not None:
                     self.form = ion_form.IonForm(
                         config["form"]
                     )
+                else:
+                    self.form = None
             else:
                 self.form = None
             self.label = config["label"]\

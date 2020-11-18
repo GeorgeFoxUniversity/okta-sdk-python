@@ -20,7 +20,7 @@ limitations under the License.
 
 from okta.okta_object import OktaObject
 from okta.okta_collection import OktaCollection
-import okta.models.password_dictionary\
+from okta.models import password_dictionary\
     as password_dictionary
 
 
@@ -38,10 +38,12 @@ class PasswordPolicyPasswordSettingsComplexity(
                 if isinstance(config["dictionary"],
                               password_dictionary.PasswordDictionary):
                     self.dictionary = config["dictionary"]
-                else:
+                elif config["dictionary"] is not None:
                     self.dictionary = password_dictionary.PasswordDictionary(
                         config["dictionary"]
                     )
+                else:
+                    self.dictionary = None
             else:
                 self.dictionary = None
             self.exclude_attributes = OktaCollection.form_list(

@@ -19,7 +19,7 @@ limitations under the License.
 # SEE CONTRIBUTOR DOCUMENTATION
 
 from okta.okta_object import OktaObject
-import okta.models.scope_type\
+from okta.models import scope_type\
     as scope_type
 
 
@@ -39,10 +39,12 @@ class Scope(
                 if isinstance(config["type"],
                               scope_type.ScopeType):
                     self.type = config["type"]
-                else:
+                elif config["type"] is not None:
                     self.type = scope_type.ScopeType(
                         config["type"].upper()
                     )
+                else:
+                    self.type = None
             else:
                 self.type = None
         else:
